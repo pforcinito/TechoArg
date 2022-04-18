@@ -1,0 +1,88 @@
+﻿@model Techo.ViewModels.ContribuyenteModalViewModel
+
+@{ var editMode = (Model.Id > 0); }
+
+<!-- Modal -->
+<div class="modal fade" id="add-contact" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addContactLabel">Agregar Contribuyente</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-page-handler="@(editMode ? "EditContribuyente" : "SaveContribuyente")">
+                    <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
+
+                    @if (editMode)
+                    {
+                        <div class="form-group">
+                            <label asp-for="Id"></label>
+                            <input asp-for="Id" class="form-control" readonly="readonly" />
+                        </div>
+                    }
+                    <div class="form-group">
+                        <label asp-for="Nombre"></label>
+                        <input asp-for="Nombre" class="form-control" />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Apellido"></label>
+                        <input asp-for="Apellido" class="form-control" />
+                        <span asp-validation-for="Apellido" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="EntidadParticipativa"></label>
+                        <select class="form-control" asp-for="EntidadParticipativaId">
+                            @if (Model.EntidadParticipativaId == 0)
+                            {
+                                <option value="-1" selected>Seleccione Entidad Participativa</option>
+                            }
+                            else
+                            {
+                                <option value="-1">Seleccione Entidad Participativa</option>
+                            }
+
+                            @foreach (var pr in Model.EntidadParticipativa)
+                            {
+                                if (Model.EntidadParticipativaId == pr.Id)
+                                {
+                                    <option value=@pr.Id selected>@pr.Nombre</option>
+                                }
+                                else
+                                {
+                                    <option value=@pr.Id>@pr.Nombre</option>
+                                }
+                            }
+                        </select>
+                    </div>               
+                    <div class="form-group">
+                        <label asp-for="Telefono"></label>
+                        <input asp-for="Telefono" class="form-control" />
+                        <span asp-validation-for="Telefono" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                @if (editMode)
+                {<button type="button" class="btn btn-success" @*onclick="return confirm('Esta seguro de querer modificar el cliente?')"*@ data-save="modal">Modificar</button>}               
+                else
+                { <button type="button" class="btn btn-primary" data-save="modal">Crear</button>}
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,56 @@
+﻿@page
+@model Techo.Views.LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="loginDiv">
+    <form method="post">
+        <div class="form-group">
+            <label for="txtUsuario">Usuario</label>
+            <input id="txtUsuario" type="text" class="form-control" placeholder="Ingrese usuario" asp-for="@Model.Usuario.Nombre" />
+        </div>
+        <div class="form-group">
+            <label for="txtPassword">Contraseña</label>
+            <input id="txtPassword" type="password" class="form-control" placeholder="Ingrese contraseña" asp-for="@Model.Usuario.Password" />
+        </div>
+        @if (Model.ShowErrorMessage)
+        {
+            <div class="errorMsg">
+                <label>@Model.ErrorMessage</label>
+            </div>
+        }
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Ingresar</button>
+        </div>
+    </form>
+
+    <div style="text-align:right">
+        <label id="databaseStatus" class="text-muted" style="font-size:8px;"></label>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.get("?handler=DatabaseStatus")
+                .done(function (data, status, xhr) {
+                if (xhr.status != 200)
+                    $('#databaseStatus').text("Database Offline");
+                else
+                    $('#databaseStatus').text("Database Online");
+                })
+                .fail(function (data, status, xhr) {
+                    $('#databaseStatus').text("Database Offline");
+            });
+
+            //$.get("?handler=DatabaseStatus", function (data, status, xhr) {
+            //    debugger;
+            //    if (xhr.status != 200)
+            //        $('#databaseStatus').text("Database Offline");
+            //    else
+            //        $('#databaseStatus').text("Database Online");
+            //});
+        });
+    </script>
+}
